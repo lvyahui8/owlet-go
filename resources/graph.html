@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Analysis report</title>
+    <link href="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/fontawesome-iconpicker/3.2.0/css/fontawesome-iconpicker.min.css" type="text/css" rel="stylesheet" />
+    <!-- IonIcons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link href="https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-M/bootstrap/4.6.1/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
+    <link href="https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-M/admin-lte/3.2.0/css/adminlte.min.css" type="text/css" rel="stylesheet" />
+
+    <script src="https://gw.alipayobjects.com/os/lib/antv/g6/4.3.11/dist/g6.min.js"></script>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card card-primary card-tabs">
+                <div class="card-header p-0 pt-1">
+                    <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="custom-tabs-one-home-tab" data-toggle="pill" href="#custom-tabs-one-home" role="tab" aria-controls="custom-tabs-one-home" aria-selected="true">Diff</a>
+                        </li>
+
+                    </ul>
+                </div>
+                <div class="card-body">
+                    <div class="tab-content" id="custom-tabs-one-tabContent">
+                        <div class="tab-pane fade show active" id="custom-tabs-one-home" role="tabpanel" aria-labelledby="custom-tabs-one-home-tab">
+                            <div id="graph" ></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.card -->
+            </div>
+            <div id="mountNode" style="background-color: #aaa"></div>
+        </div>
+    </div>
+</div>
+
+<!-- jQuery -->
+<script src="https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-M/jquery/3.6.0/jquery.min.js" type="application/javascript"></script>
+<!-- Bootstrap -->
+<script src="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/bootstrap/4.6.1/js/bootstrap.min.js" type="application/javascript"></script>
+<script src="https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-M/bootstrap/4.6.1/js/bootstrap.bundle.min.js" type="application/javascript"></script>
+<script src="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/fontawesome-iconpicker/3.2.0/js/fontawesome-iconpicker.min.js" type="application/javascript"></script>
+<script src="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/admin-lte/3.2.0/js/adminlte.min.js" type="application/javascript"></script>
+<script src="graph.js"></script>
+<script>
+    $(document).ready(() => {
+        const firstCard = document.getElementById('graph');
+        defaultWidth = firstCard.scrollWidth;
+        $.getJSON('graph.json',(data) => {
+            createGraph('graph',data);
+        });
+    })
+</script>
+</body>
+</html>
