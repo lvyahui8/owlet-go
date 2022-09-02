@@ -3,11 +3,9 @@ package owlet
 import (
     "encoding/json"
     "fmt"
-    "golang.org/x/tools/go/callgraph"
     "io/ioutil"
     "os"
     "owlet-go/utils"
-    "strconv"
 )
 
 type Painter struct {
@@ -15,20 +13,24 @@ type Painter struct {
 
 type Obj map[string]interface{}
 
-func (p *Painter) OutputGraphHtml(graph callgraph.Graph, graphName string) error {
+func (p *Painter) OutputGraphHtml(graph * Graph, graphName string) error {
     var res = make(map[string]interface{})
     var nodes []Obj
     var edges []Obj
-    for _, node := range graph.Nodes {
+    for _, node := range graph.NodeMap {
+        pkgPath := ""
+        if  node.Func.Pkg != nil {
+            pkgPath =  node.Func.Pkg.Pkg.Path()
+        }
         nodes = append(nodes, Obj{
-            "id":    strconv.Itoa(node.ID),
+            "id":    node.ID,
             "label": node.Func.Name(),
-            "pkg":   node.Func.Pkg.Pkg.Path(),
+            "pkg": pkgPath ,
         })
         for _, edge := range node.Out {
             edges = append(edges, Obj{
-                "source": strconv.Itoa(edge.Caller.ID),
-                "target": strconv.Itoa(edge.Callee.ID),
+                "source":edge.CallerID,
+                "target": edge.CalleeID,
             })
         }
     }

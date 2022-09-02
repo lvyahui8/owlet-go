@@ -10,11 +10,15 @@ import (
     "golang.org/x/tools/go/pointer"
     "golang.org/x/tools/go/ssa"
     "golang.org/x/tools/go/ssa/ssautil"
+    "owlet-go/utils"
+    "strconv"
+    "strings"
 )
 
 type Program struct {
     Args  InitProgramArgs
-    Graph *callgraph.Graph
+    Graph * Graph
+    RootPkgPath string
 }
 
 type Algo string
@@ -41,11 +45,13 @@ func (p *Program) Load(args InitProgramArgs) error {
         return err
     }
     prog, pkgs := ssautil.AllPackages(initial, 0)
+    p.RootPkgPath = GetCommonPkgPath(pkgs)
     prog.Build()
     mainPkgs := ssautil.MainPackages(pkgs)
+    var g *callgraph.Graph
     switch args.Algorithm {
     case "cha":
-        p.Graph = cha.CallGraph(prog)
+        g = cha.CallGraph(prog)
     case "rta":
         var roots []*ssa.Function
         for _, mainPkg := range mainPkgs {
@@ -53,9 +59,9 @@ func (p *Program) Load(args InitProgramArgs) error {
             roots = append(roots, mainPkg.Func("init"))
         }
         res := rta.Analyze(roots, true)
-        p.Graph = res.CallGraph
+        g = res.CallGraph
     case "vta":
-        p.Graph = vta.CallGraph(ssautil.AllFunctions(prog), cha.CallGraph(prog))
+        g = vta.CallGraph(ssautil.AllFunctions(prog), cha.CallGraph(prog))
     case "pta":
         result, err := pointer.Analyze(&pointer.Config{
             Mains:          mainPkgs,
@@ -64,10 +70,64 @@ func (p *Program) Load(args InitProgramArgs) error {
         if err != nil {
             return err
         }
-        p.Graph = result.CallGraph
+        g = result.CallGraph
+    }
+    p.Graph = ToGraph(g)
+    p.removeMeaningLessNode()
+    return nil
+}
+
+
+func  ToGraph(g *callgraph.Graph) * Graph{
+    graph := &Graph{NodeMap: make(map[string]*Node)}
+    for fc, n := range g.Nodes {
+        node := &Node{
+            In: make(map[string]*Edge),
+            Out: make(map[string]*Edge),
+        }
+        node.Func = fc
+        node.ID = strconv.Itoa(n.ID)
+        graph.NodeMap[node.ID] = node
     }
 
-    return nil
+    for _, n := range g.Nodes {
+        edge := &Edge{}
+        for _, e := range n.Out {
+            edge.Site = e.Site
+            edge.CallerID = strconv.Itoa(e.Caller.ID)
+            edge.CalleeID = strconv.Itoa(e.Callee.ID)
+            graph.NodeMap[edge.CallerID].Out[edge.CalleeID] = edge
+            graph.NodeMap[edge.CalleeID].In[edge.CallerID] = edge
+        }
+    }
+    return graph
+}
+
+func GetCommonPkgPath(pkgs []*ssa.Package) string {
+    var paths []string
+    for _, pkg := range pkgs {
+        paths = append(paths, pkg.Pkg.Path())
+    }
+    return utils.GetCommonPrefix(paths)
+}
+
+func (p * Program) removeMeaningLessNode()  {
+    for _, node := range p.Graph.NodeMap {
+        if node.Func.Pkg == nil {
+            p.Graph.Delete(node.ID)
+            continue
+        }
+        pkgPath := node.Func.Pkg.Pkg.Path()
+        if p.IsTargetPkg(pkgPath) {
+           continue
+        }
+        // 删除非目标包的函数
+        p.Graph.Delete(node.ID)
+    }
+}
+
+func (p * Program) IsTargetPkg(pkgPath string) bool {
+    return strings.HasPrefix(pkgPath,p.RootPkgPath) || strings.HasPrefix(pkgPath,p.RootPkgPath + "/")
 }
 
 func CheckErrors(pkgs []*packages.Package) error {
