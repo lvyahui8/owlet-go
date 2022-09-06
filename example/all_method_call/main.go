@@ -15,7 +15,20 @@ func fc4()  {
 
 }
 
+func fc5() {
+    fc6()()
+}
+
+func fc6() func () {
+    return fc7
+}
+
+func fc7() {
+
+}
+
 func main() {
     fc1()
     fc3(fc4)
+    fc5()
 }

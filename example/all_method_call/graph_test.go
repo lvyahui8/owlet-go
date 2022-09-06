@@ -42,4 +42,9 @@ func TestCallType(t *testing.T) {
     assert.NotNil(t, edge)
     _,ok = edge.Site.Common().Value.(*ssa.Parameter)
     assert.True(t, ok)
+
+    edge = FindEdge(g, "fc5", "fc7")
+    assert.NotNil(t, edge)
+    _,ok = edge.Site.Common().Value.(*ssa.Call)
+    assert.True(t, ok)
 }
