@@ -2,6 +2,7 @@ package main
 
 import (
     "github.com/stretchr/testify/assert"
+    "go/token"
     "golang.org/x/tools/go/ssa"
     owlet "owlet-go"
     "testing"
@@ -47,4 +48,20 @@ func TestCallType(t *testing.T) {
     assert.NotNil(t, edge)
     _,ok = edge.Site.Common().Value.(*ssa.Call)
     assert.True(t, ok)
+
+    edge = FindEdge(g, "main", "name")
+    assert.NotNil(t, edge)
+    _,ok = edge.Site.Common().Value.(*ssa.Function)
+    args := edge.Site.Common().Args
+    assert.True(t, ok && len(args) == 1)
+    unOp,ok := args[0].(*ssa.UnOp)
+    assert.True(t, ok && unOp.Op == token.MUL)
+
+    edge = FindEdge(g, "main", "age")
+    assert.NotNil(t, edge)
+    _,ok = edge.Site.Common().Value.(*ssa.Function)
+    args = edge.Site.Common().Args
+    assert.True(t, ok && len(args) == 1)
+    unOp,ok = args[0].(*ssa.UnOp)
+    assert.True(t, ok && unOp.Op == token.MUL)
 }

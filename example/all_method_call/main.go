@@ -27,8 +27,18 @@ func fc7() {
 
 }
 
+type User struct{}
+
+func (u User) name() {
+}
+
+func (u User) age() {
+}
 func main() {
     fc1()
     fc3(fc4)
     fc5()
+    user := User{}
+    user.name()
+    user.age()
 }
