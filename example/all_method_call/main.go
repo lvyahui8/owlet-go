@@ -45,6 +45,16 @@ func (m * Member) level() {
 
 }
 
+func fc8(fc func()) func() {
+    return func() {
+        fc()
+    }
+}
+
+func fc9() {
+
+}
+
 func main() {
     fc1()
     fc3(fc4)
@@ -55,4 +65,6 @@ func main() {
 
     member := Member{}
     member.level()
+
+    fc8(fc9)()
 }

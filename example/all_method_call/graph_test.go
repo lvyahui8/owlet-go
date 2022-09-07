@@ -72,4 +72,11 @@ func TestCallType(t *testing.T) {
     assert.True(t, ok && len(args) == 1)
     _,ok = args[0].(*ssa.Alloc)
     assert.True(t, ok)
+
+    edge = FindEdge(g, "fc8$1", "fc9")
+    assert.NotNil(t, edge)
+    unOp,ok = edge.Site.Common().Value.(*ssa.UnOp)
+    assert.True(t, ok)
+    _,ok = unOp.X.(*ssa.FreeVar)
+    assert.True(t, ok)
 }
