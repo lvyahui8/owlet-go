@@ -64,4 +64,12 @@ func TestCallType(t *testing.T) {
     assert.True(t, ok && len(args) == 1)
     unOp,ok = args[0].(*ssa.UnOp)
     assert.True(t, ok && unOp.Op == token.MUL)
+
+    edge = FindEdge(g, "main", "level")
+    assert.NotNil(t, edge)
+    _,ok = edge.Site.Common().Value.(*ssa.Function)
+    args = edge.Site.Common().Args
+    assert.True(t, ok && len(args) == 1)
+    _,ok = args[0].(*ssa.Alloc)
+    assert.True(t, ok)
 }

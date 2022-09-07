@@ -34,6 +34,17 @@ func (u User) name() {
 
 func (u User) age() {
 }
+
+func (u * User) phone() {
+
+}
+
+type Member struct{}
+
+func (m * Member) level() {
+
+}
+
 func main() {
     fc1()
     fc3(fc4)
@@ -41,4 +52,7 @@ func main() {
     user := User{}
     user.name()
     user.age()
+
+    member := Member{}
+    member.level()
 }

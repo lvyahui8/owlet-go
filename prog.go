@@ -91,8 +91,8 @@ func  ToGraph(g *callgraph.Graph) * Graph{
     }
 
     for _, n := range g.Nodes {
-        edge := &Edge{}
         for _, e := range n.Out {
+            edge := &Edge{}
             edge.Site = e.Site
             edge.CallerID = strconv.Itoa(e.Caller.ID)
             edge.CalleeID = strconv.Itoa(e.Callee.ID)
