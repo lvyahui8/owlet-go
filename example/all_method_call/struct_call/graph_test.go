@@ -42,4 +42,11 @@ func TestCallSite(t *testing.T) {
     _,ok = args[0].(*ssa.Alloc)
     assert.True(t, ok)
 
+    edge = testutil.FindEdge(g, "home", "email")
+    assert.NotNil(t, edge)
+    _,ok = edge.Site.Common().Value.(*ssa.Function)
+    args = edge.Site.Common().Args
+    assert.True(t, ok && len(args) == 1)
+    _,ok = args[0].(*ssa.Alloc)
+    assert.True(t, ok)
 }

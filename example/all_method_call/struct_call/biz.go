@@ -19,6 +19,10 @@ func (m * Member) level() {
 
 }
 
+func (m * Member) email() {
+
+}
+
 func home() {
     user := User{}
     user.name()
@@ -26,4 +30,7 @@ func home() {
 
     member := Member{}
     member.level()
+
+    m2 := &Member{}
+    m2.email()
 }
