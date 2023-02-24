@@ -31,5 +31,5 @@ func main() {
         _, _ = fmt.Fprintln(os.Stderr, err)
         os.Exit(1)
     }
-    fmt.Printf("load func len %d\n", len(program.Graph.Nodes))
+    fmt.Printf("load func len %d\n", len(program.Graph.NodeMap))
 }

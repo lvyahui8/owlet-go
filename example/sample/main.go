@@ -12,6 +12,33 @@ func Service() {
     // defer recover()
 }
 
+func Api() {
+    func() {
+        func() {
+
+        }()
+    }()
+    func() {
+
+    }()
+}
+
+type User struct {
+
+}
+
+func (u*User) Ping() {
+    func() {
+        func(){
+
+        }()
+    }()
+}
+
+func (u *User) GetName() {
+
+}
+
 func main() {
     Homepage()
 }

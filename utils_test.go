@@ -1,4 +1,4 @@
-package utils
+package owlet
 
 import (
     "github.com/stretchr/testify/assert"

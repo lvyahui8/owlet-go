@@ -10,7 +10,6 @@ import (
     "golang.org/x/tools/go/pointer"
     "golang.org/x/tools/go/ssa"
     "golang.org/x/tools/go/ssa/ssautil"
-    "owlet-go/utils"
     "strconv"
     "strings"
 )
@@ -108,7 +107,7 @@ func GetCommonPkgPath(pkgs []*ssa.Package) string {
     for _, pkg := range pkgs {
         paths = append(paths, pkg.Pkg.Path())
     }
-    return utils.GetCommonPrefix(paths)
+    return GetCommonPrefix(paths)
 }
 
 func (p * Program) removeMeaningLessNode()  {

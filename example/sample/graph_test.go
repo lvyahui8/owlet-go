@@ -1,10 +1,9 @@
 package main
 
 import (
-    "github.com/stretchr/testify/assert"
-    owlet "owlet-go"
-    "owlet-go/utils"
-    "testing"
+	"github.com/stretchr/testify/assert"
+	owlet "owlet-go"
+	"testing"
 )
 
 func TestGraph(t *testing.T) {
@@ -20,5 +19,5 @@ func TestGraph(t *testing.T) {
 }
 
 func TestRootDir(t *testing.T) {
-    t.Logf("root path %s", utils.RootDir())
+    t.Logf("root path %s", owlet.RootDir())
 }

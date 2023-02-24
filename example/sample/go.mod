@@ -1,4 +1,4 @@
-module sample
+module github.com/owlet-go/example/sample
 
 go 1.18
 

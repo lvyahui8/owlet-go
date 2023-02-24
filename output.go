@@ -5,7 +5,6 @@ import (
     "fmt"
     "io/ioutil"
     "os"
-    "owlet-go/utils"
 )
 
 type Painter struct {
@@ -50,7 +49,7 @@ func (p *Painter) OutputGraphHtml(graph * Graph, graphName string) error {
     if err != nil {
         return err
     }
-    _ = utils.CopyFile(fmt.Sprintf("%s/resources/graph.html", utils.RootDir()), fmt.Sprintf("%s/graph.html", outputPath))
-    _ = utils.CopyFile(fmt.Sprintf("%s/resources/graph.js", utils.RootDir()), fmt.Sprintf("%s/graph.js", outputPath))
+    _ = CopyFile(fmt.Sprintf("%s/resources/graph.html", RootDir()), fmt.Sprintf("%s/graph.html", outputPath))
+    _ = CopyFile(fmt.Sprintf("%s/resources/graph.js", RootDir()), fmt.Sprintf("%s/graph.js", outputPath))
     return ioutil.WriteFile(fmt.Sprintf("%s/graph.json", outputPath), bits, os.ModePerm)
 }
