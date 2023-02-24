@@ -13,6 +13,7 @@ func TestGetGoFuncKey(t *testing.T) {
 	})
 	require.Nil(t, err)
 	for _, n := range prog.Graph.NodeMap {
-		t.Logf("fcKey %s\n", GetGoFuncKey(n.Func))
+		hash := GetFuncBodyHash(n.Func)
+		t.Logf("hash %s,fcKey %s\n",hash, GetGoFuncKey(n.Func))
 	}
 }
