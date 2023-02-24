@@ -78,6 +78,7 @@ func (p *Program) Load(args InitProgramArgs) error {
 
 
 func  ToGraph(g *callgraph.Graph) * Graph{
+    g.DeleteSyntheticNodes()
     graph := &Graph{NodeMap: make(map[string]*Node)}
     for fc, n := range g.Nodes {
         node := &Node{
